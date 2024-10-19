@@ -1,4 +1,4 @@
-import CommonForm from "@/components/common/form";
+import CommonForm, { AuthFormData } from "@/components/common/form";
 import { loginFormControls } from "@/components/config";
 import { useToast } from "@/hooks/use-toast";
 import { loginUser } from "@/store/auth-slice";
@@ -7,16 +7,19 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
-const initialState = {
+const initialState: AuthFormData = {
   email: "",
   password: "",
 };
-type FormValues = typeof initialState;
 
 function AuthLogin() {
-  const [formData, setFormData] = useState<FormValues>(initialState);
+  const [formData, setFormData] = useState<AuthFormData>(initialState);
   const dispatch: AppDispatch = useDispatch();
   const { toast } = useToast();
+
+  function formValidHandler() {
+    return formData.email.trim() !== "" && formData.password.trim() !== "";
+  }
 
   function submitHandler(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -39,7 +42,7 @@ function AuthLogin() {
     <div className="mx-auto w-full max-w-md space-y-6 ">
       <div className="text-center">
         <h1 className="text-3xl font-bold tracking-tight text-foreground">
-          Sihn In to your account
+          Sign In to your account
         </h1>
         <p className="mt-2 ">
           Don't Have an account
@@ -57,6 +60,7 @@ function AuthLogin() {
         formData={formData}
         setFormData={setFormData}
         onSubmit={submitHandler}
+        isButtonDisabled={!formValidHandler()}
       />
     </div>
   );

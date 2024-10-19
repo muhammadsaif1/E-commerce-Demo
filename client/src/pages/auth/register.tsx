@@ -1,4 +1,4 @@
-import CommonForm, { FormData } from "@/components/common/form";
+import CommonForm, { AuthFormData } from "@/components/common/form";
 import { registerFormControls } from "@/components/config";
 import { useToast } from "@/hooks/use-toast";
 import { registerUser } from "@/store/auth-slice";
@@ -8,17 +8,25 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
-const initialState: FormData = {
+const initialState: AuthFormData = {
   userName: "",
   email: "",
   password: "",
 };
 
 function AuthRegister() {
-  const [formData, setFormData] = useState<FormData>(initialState);
+  const [formData, setFormData] = useState<AuthFormData>(initialState);
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  function formValidHandler() {
+    return (
+      formData.userName?.trim() !== "" &&
+      formData.email.trim() !== "" &&
+      formData.password.trim() !== ""
+    );
+  }
 
   function submitHandler(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -60,6 +68,7 @@ function AuthRegister() {
         formData={formData}
         setFormData={setFormData}
         onSubmit={submitHandler}
+        isButtonDisabled={!formValidHandler()}
       />
     </div>
   );

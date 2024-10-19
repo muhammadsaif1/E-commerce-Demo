@@ -15,34 +15,48 @@ type FormControl = {
   label: string;
   componentType: "input" | "select" | "textarea";
   placeholder?: string;
-  type?: string; // e.g., "text", "email", "password", etc.
-  options?: { id: string; label: string }[]; // Only for select fields
+  type?: string;
+  options?: { id: string; label: string }[];
 };
 
-export type FormData = {
+export type AuthFormData = {
   userName?: string;
   email: string;
   password: string;
 };
 
-interface CommonFormProps {
+export type ProductFormData = {
+  _id: string;
+  image: string | null;
+  title: string;
+  description: string;
+  category: string;
+  brand: string;
+  price: string;
+  salePrice: string;
+  totalStock: string;
+};
+
+interface CommonFormProps<T> {
   formControls: FormControl[];
-  formData: FormData;
-  setFormData: React.Dispatch<React.SetStateAction<FormData>>;
+  formData: T;
+  setFormData: React.Dispatch<React.SetStateAction<T>>;
   onSubmit: React.FormEventHandler<HTMLFormElement>;
   buttonText?: string;
+  isButtonDisabled: boolean;
 }
 
-function CommonForm({
+function CommonForm<T extends AuthFormData | ProductFormData>({
   formControls,
   formData,
   setFormData,
   onSubmit,
   buttonText,
-}: CommonFormProps) {
+  isButtonDisabled,
+}: CommonFormProps<T>) {
   function renderInputsByComponentId(getControlItem: FormControl) {
     let element = null;
-    const value = formData[getControlItem.name as keyof FormData] || "";
+    const value = formData[getControlItem.name as keyof T] || "";
 
     switch (getControlItem.componentType) {
       case "input":
@@ -51,8 +65,8 @@ function CommonForm({
             name={getControlItem.name}
             placeholder={getControlItem.placeholder}
             id={getControlItem.name}
-            type={getControlItem.type}
-            value={value}
+            type={getControlItem.type || "text"}
+            value={value as string}
             onChange={(event) =>
               setFormData({
                 ...formData,
@@ -62,6 +76,7 @@ function CommonForm({
           />
         );
         break;
+
       case "select":
         element = (
           <Select
@@ -71,30 +86,29 @@ function CommonForm({
                 [getControlItem.name]: value,
               })
             }
-            value={value}
+            value={String(value)}
           >
             <SelectTrigger className="w-full">
-              <SelectValue placeholder={getControlItem.placeholder} />
+              <SelectValue placeholder={getControlItem.label} />
             </SelectTrigger>
             <SelectContent>
-              {getControlItem.options && getControlItem.options.length > 0
-                ? getControlItem.options.map((optionItem) => (
-                    <SelectItem key={optionItem.id} value={optionItem.id}>
-                      {optionItem.label}
-                    </SelectItem>
-                  ))
-                : null}
+              {getControlItem.options?.map((optionItem) => (
+                <SelectItem key={optionItem.id} value={optionItem.id}>
+                  {optionItem.label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         );
         break;
+
       case "textarea":
         element = (
           <Textarea
             name={getControlItem.name}
             placeholder={getControlItem.placeholder}
             id={getControlItem.name}
-            value={value}
+            value={value as string}
             onChange={(event) =>
               setFormData({
                 ...formData,
@@ -104,14 +118,15 @@ function CommonForm({
           />
         );
         break;
+
       default:
         element = (
           <Input
             name={getControlItem.name}
             placeholder={getControlItem.placeholder}
             id={getControlItem.name}
-            type={getControlItem.type}
-            value={value}
+            type={getControlItem.type || "text"}
+            value={value as string}
             onChange={(event) =>
               setFormData({
                 ...formData,
@@ -135,7 +150,7 @@ function CommonForm({
           </div>
         ))}
       </div>
-      <Button type="submit" className="mt-2 w-full">
+      <Button disabled={isButtonDisabled} type="submit" className="mt-2 w-full">
         {buttonText || "Submit"}
       </Button>
     </form>

@@ -4,6 +4,7 @@ const connectToDatabase = require("./config/database");
 const cookieParser = require("cookie-parser");
 const authRouter = require("./routes/auth/index");
 const corsMiddleware = require("./middleware/corsHandler");
+const adminProductsRouter = require("./routes/admin/products");
 
 connectToDatabase();
 
@@ -14,6 +15,7 @@ app.use(corsMiddleware);
 app.use(cookieParser());
 app.use(express.json());
 app.use("/api/auth", authRouter);
+app.use("/api/admin/products", adminProductsRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on ${PORT}`);

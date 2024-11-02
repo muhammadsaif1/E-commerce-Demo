@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToCart, fetchCartItems } from "@/store/shop/cart-slice";
 import { useToast } from "@/hooks/use-toast";
 import { UserPayload } from "@/store/auth-slice";
+import { setProductDetails } from "@/store/shop/products-slice";
 
 interface productDetailsProp {
   open: boolean;
@@ -40,8 +41,13 @@ function ProductDetailsDialog({
       }
     });
   }
+
+  function closeDialogHandler() {
+    setOpen(false);
+    dispatch(setProductDetails());
+  }
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={closeDialogHandler}>
       <DialogContent className="grid grid-cols-2 gap-8 sm:p-12 max-w-[90vw] sm:max-w-[80vw] lg:max-w-[70vw] ">
         <div className="relative overflow-hidden rounded-lg ">
           <img

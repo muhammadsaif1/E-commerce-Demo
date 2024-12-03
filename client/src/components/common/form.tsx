@@ -1,3 +1,4 @@
+import { AddressFormData } from "@/store/shop/address-slice";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
@@ -46,7 +47,9 @@ interface CommonFormProps<T> {
   isButtonDisabled: boolean;
 }
 
-function CommonForm<T extends AuthFormData | ProductFormData>({
+function CommonForm<
+  T extends AuthFormData | ProductFormData | AddressFormData
+>({
   formControls,
   formData,
   setFormData,

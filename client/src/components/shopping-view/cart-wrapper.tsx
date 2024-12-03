@@ -2,12 +2,14 @@ import { CartItem } from "@/store/shop/cart-slice";
 import { Button } from "../ui/button";
 import { SheetContent, SheetHeader, SheetTitle } from "../ui/sheet";
 import UserCartItemsContent from "./cart-items-content";
+import { useNavigate } from "react-router-dom";
 
 interface cartItemsProp {
   cartItems: CartItem[];
 }
 
 function UserCartWrapper({ cartItems }: cartItemsProp) {
+  const navigate = useNavigate();
   const totalCartAmount =
     cartItems && cartItems.length > 0
       ? cartItems.reduce(
@@ -38,7 +40,12 @@ function UserCartWrapper({ cartItems }: cartItemsProp) {
           <span className="font-bold">${totalCartAmount}</span>
         </div>
       </div>
-      <Button className="w-full mt-6  ">Checkout</Button>
+      <Button
+        onClick={() => navigate("/shop/checkout")}
+        className="w-full mt-6  "
+      >
+        Checkout
+      </Button>
     </SheetContent>
   );
 }

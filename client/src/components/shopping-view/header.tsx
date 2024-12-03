@@ -84,6 +84,7 @@ function HeaderRightContent() {
         </Button>
 
         <UserCartWrapper
+          setOpenCartSheet={setOpenCartSheet}
           cartItems={
             cartItems.items && cartItems.items.length > 0 ? cartItems.items : []
           }

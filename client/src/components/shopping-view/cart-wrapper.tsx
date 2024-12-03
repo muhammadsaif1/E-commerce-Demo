@@ -6,9 +6,10 @@ import { useNavigate } from "react-router-dom";
 
 interface cartItemsProp {
   cartItems: CartItem[];
+  setOpenCartSheet: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function UserCartWrapper({ cartItems }: cartItemsProp) {
+function UserCartWrapper({ cartItems, setOpenCartSheet }: cartItemsProp) {
   const navigate = useNavigate();
   const totalCartAmount =
     cartItems && cartItems.length > 0
@@ -41,7 +42,10 @@ function UserCartWrapper({ cartItems }: cartItemsProp) {
         </div>
       </div>
       <Button
-        onClick={() => navigate("/shop/checkout")}
+        onClick={() => {
+          navigate("/shop/checkout");
+          setOpenCartSheet(false);
+        }}
         className="w-full mt-6  "
       >
         Checkout

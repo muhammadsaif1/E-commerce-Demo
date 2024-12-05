@@ -8,15 +8,22 @@ interface AddressCardType {
   addressInfo: AddressFormData;
   deleteHandler: (addressInfo: AddressFormData) => void;
   editHandler: (addressInfo: AddressFormData) => void;
+  setCurrentSelectedAddress: React.Dispatch<
+    React.SetStateAction<AddressFormData | null>
+  >;
 }
 
 function AddressCard({
   addressInfo,
   deleteHandler,
   editHandler,
+  setCurrentSelectedAddress,
 }: AddressCardType) {
+  const handleClick = setCurrentSelectedAddress
+    ? () => setCurrentSelectedAddress(addressInfo ?? null)
+    : undefined;
   return (
-    <Card>
+    <Card onClick={handleClick}>
       <CardContent key={addressInfo?._id} className="grid gap-4 p-4">
         <Label>Address: {addressInfo?.address}</Label>
         <Label>City: {addressInfo?.city}</Label>

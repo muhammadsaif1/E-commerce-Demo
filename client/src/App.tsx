@@ -20,6 +20,7 @@ import { AppDispatch, RootState } from "./store/store";
 import { useEffect } from "react";
 import { checkAuth } from "./store/auth-slice";
 import { Skeleton } from "@/components/ui/skeleton";
+import OrderSuccessPage from "./pages/shopping-view/order-success";
 
 function App() {
   const { isAuthenticated, user, isLoading } = useSelector(
@@ -72,6 +73,7 @@ function App() {
           <Route path="listing" element={<ShoppingListing />} />
           <Route path="checkout" element={<ShoppingCheckout />} />
           <Route path="account" element={<ShoppingAccount />} />
+          <Route path="order-success" element={<OrderSuccessPage />} />
         </Route>
 
         <Route path="/unauth" element={<UnAuth />} />

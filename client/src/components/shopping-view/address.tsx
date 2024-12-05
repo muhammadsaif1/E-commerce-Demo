@@ -23,7 +23,13 @@ const initialFormData: AddressFormData = {
   notes: "",
 };
 
-function Address() {
+interface AddressProps {
+  setCurrentSelectedAddress: React.Dispatch<
+    React.SetStateAction<AddressFormData | null>
+  >;
+}
+
+function Address({ setCurrentSelectedAddress }: AddressProps) {
   const [formData, setFormData] = useState<AddressFormData>(initialFormData);
   const [isFormValid, setIsFormValid] = useState<boolean>(false);
   const [currentEditingId, setCurrentEditingId] = useState<string | null>(null);
@@ -132,6 +138,7 @@ function Address() {
         {addressList && addressList.length > 0 ? (
           addressList.map((item: AddressFormData) => (
             <AddressCard
+              setCurrentSelectedAddress={setCurrentSelectedAddress}
               editHandler={editHandler}
               deleteHandler={deleteHandler}
               addressInfo={item}

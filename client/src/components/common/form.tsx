@@ -10,6 +10,7 @@ import {
   SelectValue,
 } from "../ui/select";
 import { Textarea } from "../ui/textarea";
+import { statusForm } from "../admin-view/order-details";
 
 type FormControl = {
   name: string;
@@ -44,11 +45,11 @@ interface CommonFormProps<T> {
   setFormData: React.Dispatch<React.SetStateAction<T>>;
   onSubmit: React.FormEventHandler<HTMLFormElement>;
   buttonText?: string;
-  isButtonDisabled: boolean;
+  isButtonDisabled?: boolean;
 }
 
 function CommonForm<
-  T extends AuthFormData | ProductFormData | AddressFormData
+  T extends AuthFormData | ProductFormData | AddressFormData | statusForm
 >({
   formControls,
   formData,

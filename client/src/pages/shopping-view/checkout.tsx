@@ -33,6 +33,16 @@ function ShoppingCheckout() {
       : 0;
 
   function initiateHandler() {
+    if (
+      currentSelectedAddress === null ||
+      currentSelectedAddress === undefined
+    ) {
+      toast({
+        title: "Please select the address first",
+        variant: "destructive",
+      });
+      return;
+    }
     setLoading(true);
 
     const orderData = {

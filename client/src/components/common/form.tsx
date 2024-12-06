@@ -37,6 +37,7 @@ export type ProductFormData = {
   price: string;
   salePrice: string;
   totalStock: string;
+  quantity?: number;
 };
 
 interface CommonFormProps<T> {

@@ -9,6 +9,7 @@ const shopProductsRouter = require("./routes/shop/products");
 const shopCartRouter = require("./routes/shop/cart");
 const shopAddressRouter = require("./routes/shop/address");
 const shopOrderRouter = require("./routes/shop/order");
+const adminOrderRouter = require("./routes/admin/order");
 
 connectToDatabase();
 
@@ -20,6 +21,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use("/api/auth", authRouter);
 app.use("/api/admin/products", adminProductsRouter);
+app.use("/api/admin/orders", adminOrderRouter);
 
 app.use("/api/shop/products", shopProductsRouter);
 app.use("/api/shop/cart", shopCartRouter);

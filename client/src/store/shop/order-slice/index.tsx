@@ -1,12 +1,25 @@
 import { ProductFormData } from "@/components/common/form";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { AddressFormData } from "../address-slice";
+
+export interface OrderData {
+  _id: string;
+  cartId: string;
+  cartItems: ProductFormData[];
+  orderDate: string;
+  orderStatus: string;
+  orderUpdateDate: string;
+  totalAmount: number;
+  userId: string;
+  addressInfo?: AddressFormData;
+}
 
 export interface OrderState {
   isLoading: boolean;
   orderId: string | null;
-  orderList: ProductFormData[];
-  orderDetails: ProductFormData | null;
+  orderList: OrderData[];
+  orderDetails: OrderData | null;
 }
 
 const initialState: OrderState = {
@@ -16,7 +29,6 @@ const initialState: OrderState = {
   orderDetails: null,
 };
 
-// Thunk to create a new order
 export const createNewOrder = createAsyncThunk(
   "order/createNewOrder",
   async (orderData) => {
@@ -28,7 +40,6 @@ export const createNewOrder = createAsyncThunk(
   }
 );
 
-// Thunk to confirm an order
 export const confirmOrder = createAsyncThunk(
   "order/confirmOrder",
   async (orderId: string) => {
@@ -40,7 +51,6 @@ export const confirmOrder = createAsyncThunk(
   }
 );
 
-// Thunk to get all orders by user ID
 export const getAllOrdersByUserId = createAsyncThunk(
   "order/getAllOrdersByUserId",
   async (userId: string) => {
@@ -51,7 +61,6 @@ export const getAllOrdersByUserId = createAsyncThunk(
   }
 );
 
-// Thunk to get order details by ID
 export const getOrderDetails = createAsyncThunk(
   "order/getOrderDetails",
   async (id: string) => {
@@ -72,7 +81,6 @@ const shoppingOrderSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Create New Order
       .addCase(createNewOrder.pending, (state) => {
         state.isLoading = true;
       })
@@ -88,7 +96,6 @@ const shoppingOrderSlice = createSlice({
         state.isLoading = false;
         state.orderId = null;
       })
-      // Confirm Order
       .addCase(confirmOrder.pending, (state) => {
         state.isLoading = true;
       })
@@ -98,7 +105,6 @@ const shoppingOrderSlice = createSlice({
       .addCase(confirmOrder.rejected, (state) => {
         state.isLoading = false;
       })
-      // Get All Orders by User ID
       .addCase(getAllOrdersByUserId.pending, (state) => {
         state.isLoading = true;
       })
@@ -110,7 +116,7 @@ const shoppingOrderSlice = createSlice({
         state.isLoading = false;
         state.orderList = [];
       })
-      // Get Order Details
+
       .addCase(getOrderDetails.pending, (state) => {
         state.isLoading = true;
       })
@@ -118,9 +124,10 @@ const shoppingOrderSlice = createSlice({
         state.isLoading = false;
         state.orderDetails = action.payload.data;
       })
-      .addCase(getOrderDetails.rejected, (state) => {
+      .addCase(getOrderDetails.rejected, (state, action) => {
         state.isLoading = false;
         state.orderDetails = null;
+        console.log("Error fetching order details:", action.error);
       });
   },
 });

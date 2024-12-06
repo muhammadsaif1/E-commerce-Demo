@@ -33,16 +33,29 @@ export const getOrderDetailsForAdmin = createAsyncThunk<OrderData, string>(
   }
 );
 
-export const updateOrderStatus = createAsyncThunk<
-  OrderData,
-  { id: string; orderStatus: string }
->("/order/updateOrderStatus", async ({ id, orderStatus }) => {
-  const response = await axios.put(
-    `http://localhost:5000/api/admin/orders/update/${id}`,
-    { orderStatus }
-  );
-  return response.data.data;
-});
+export const updateOrderStatus = createAsyncThunk(
+  "/order/updateOrderStatus",
+  async (
+    { id, orderStatus }: { id: string; orderStatus: string },
+    { rejectWithValue }
+  ) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:5000/api/admin/orders/update/${id}`,
+        { orderStatus }
+      );
+      if (!response.data || !response.data.data) {
+        throw new Error("Invalid API response format");
+      }
+      return response.data.data;
+    } catch (error) {
+      console.error("Error updating order status:", error);
+      return rejectWithValue(
+        error.response?.data || "Failed to update order status"
+      );
+    }
+  }
+);
 
 const adminOrderSlice = createSlice({
   name: "adminOrderSlice",
@@ -104,9 +117,9 @@ const adminOrderSlice = createSlice({
           }
         }
       )
-      .addCase(updateOrderStatus.rejected, (state) => {
+      .addCase(updateOrderStatus.rejected, (state, action) => {
         state.isUpdating = false;
-        console.log("Error updating order status");
+        console.error("Error updating order status", action.error.message);
       });
   },
 });

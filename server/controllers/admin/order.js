@@ -64,17 +64,23 @@ const updateOrderStatus = async (req, res) => {
       });
     }
 
-    await Order.findByIdAndUpdate(id, { orderStatus });
+    // Update the order and return the updated document
+    const updatedOrder = await Order.findByIdAndUpdate(
+      id,
+      { orderStatus },
+      { new: true } // This ensures the updated document is returned
+    );
 
     res.status(200).json({
       success: true,
       message: "Order status is updated successfully!",
+      data: updatedOrder, // Include the updated order in the response
     });
-  } catch (e) {
-    console.log(e);
+  } catch (error) {
+    console.error("Error updating order status:", error);
     res.status(500).json({
       success: false,
-      message: "Some error occured!",
+      message: "Internal server error",
     });
   }
 };

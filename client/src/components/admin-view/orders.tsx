@@ -79,6 +79,8 @@ function AdminOrdersView() {
                         className={`py-1 px-3 ${
                           item?.orderStatus === "confirmed"
                             ? "bg-green-500"
+                            : item?.orderStatus === "rejected"
+                            ? "bg-red-600"
                             : "bg-black"
                         } `}
                       >

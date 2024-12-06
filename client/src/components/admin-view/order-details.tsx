@@ -6,8 +6,13 @@ import { Separator } from "../ui/separator";
 import { OrderData } from "@/store/shop/order-slice";
 import { Badge } from "../ui/badge";
 import { UserPayload } from "@/store/auth-slice";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store/store";
+import {
+  getOrderDetailsForAdmin,
+  updateOrderStatus,
+} from "@/store/admin/order-slice";
+import { useToast } from "@/hooks/use-toast";
 
 export type statusForm = {
   status: string;
@@ -28,9 +33,19 @@ function AdminOrderDetailsView({
   const { user } = useSelector((state: RootState) => state.auth) as {
     user: UserPayload;
   };
+  const dispatch: AppDispatch = useDispatch();
+  const { toast } = useToast();
 
-  function submitHandler(event: React.FormEvent) {
+  function statusUpdateHandler(event: React.FormEvent) {
     event.preventDefault();
+    const { status } = formData;
+    dispatch(updateOrderStatus({ id: orderDetails?._id, orderStatus: status }));
+    dispatch(getOrderDetailsForAdmin(orderDetails?._id));
+    // dispatch(getAllOrdersForAdmin());
+    setFormData(initialFormData);
+    toast({
+      title: "Status Updated successfully!",
+    });
   }
   return (
     <DialogContent className="sm:max-w-[600px]">
@@ -51,6 +66,8 @@ function AdminOrderDetailsView({
                 className={`py-1 px-3 ${
                   orderDetails?.orderStatus === "confirmed"
                     ? "bg-green-500"
+                    : orderDetails?.orderStatus === "rejected"
+                    ? "bg-red-600"
                     : "bg-black"
                 } `}
               >
@@ -115,7 +132,7 @@ function AdminOrderDetailsView({
             formData={formData}
             setFormData={setFormData}
             buttonText={"Update Status"}
-            onSubmit={submitHandler}
+            onSubmit={statusUpdateHandler}
           />
         </div>
       </div>

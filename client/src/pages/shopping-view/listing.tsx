@@ -51,6 +51,8 @@ function ShoppingListing() {
   const [openDetailsDialog, setOpenDetailsDialog] = useState<boolean>(false);
   const { toast } = useToast();
 
+  const categorySearchParam = searchParams.get("category");
+
   function handleSort(value: string) {
     setSort({ sortBy: value });
   }
@@ -98,7 +100,7 @@ function ShoppingListing() {
     setSort({ sortBy: "price-lowtohigh" });
     const storedFilters = sessionStorage.getItem("filters");
     setFilters(storedFilters ? JSON.parse(storedFilters) : {});
-  }, []);
+  }, [categorySearchParam]);
 
   useEffect(() => {
     if (filters && Object.keys(filters).length > 0) {

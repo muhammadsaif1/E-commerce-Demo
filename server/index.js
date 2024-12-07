@@ -12,6 +12,7 @@ const shopAddressRouter = require("./routes/shop/address");
 const shopOrderRouter = require("./routes/shop/order");
 const shopSearchRouter = require("./routes/shop/search");
 const shopReviewRouter = require("./routes/shop/product-review");
+const commonFeatureRouter = require("./routes/common/feature");
 
 connectToDatabase();
 
@@ -31,6 +32,8 @@ app.use("/api/shop/address", shopAddressRouter);
 app.use("/api/shop/order", shopOrderRouter);
 app.use("/api/shop/search", shopSearchRouter);
 app.use("/api/shop/review", shopReviewRouter);
+
+app.use("/api/common/feature", commonFeatureRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on ${PORT}`);

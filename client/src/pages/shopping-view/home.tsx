@@ -1,7 +1,5 @@
 import { Button } from "@/components/ui/button";
-import bannerOne from "../../assets/banner-1.webp";
-import bannerTwo from "../../assets/banner-2.webp";
-import bannerThree from "../../assets/banner-3.webp";
+
 import {
   Airplay,
   BabyIcon,
@@ -31,6 +29,7 @@ import { addToCart, fetchCartItems } from "@/store/shop/cart-slice";
 import { useToast } from "@/hooks/use-toast";
 import { UserPayload } from "@/store/auth-slice";
 import ProductDetailsDialog from "@/components/shopping-view/product-details";
+import { getFeatureImages } from "@/store/common-slice";
 
 const categoriesWithIcon = [
   { id: "men", label: "Men", icon: ShirtIcon },
@@ -51,7 +50,6 @@ const brandsWithIcon = [
 
 function ShoppingHome() {
   const [currentSlide, setCurrentSlide] = useState<number>(0);
-  const slides = [bannerOne, bannerTwo, bannerThree];
 
   const { productList, productDetails } = useSelector(
     (state: RootState) => state.shopProducts
@@ -59,6 +57,9 @@ function ShoppingHome() {
   const { user } = useSelector((state: RootState) => state.auth) as {
     user: UserPayload;
   };
+  const { featureImageList } = useSelector(
+    (state: RootState) => state.commonFeature
+  );
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -82,20 +83,21 @@ function ShoppingHome() {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length);
-    }, 5000);
+      setCurrentSlide((prevSlide) => (prevSlide + 1) % featureImageList.length);
+    }, 3000);
 
     return () => clearInterval(timer);
-  }, [currentSlide, slides.length]);
+  }, [currentSlide, featureImageList.length]);
 
   const goToPreviousSlide = () => {
     setCurrentSlide(
-      (prevSlide) => (prevSlide - 1 + slides.length) % slides.length
+      (prevSlide) =>
+        (prevSlide - 1 + featureImageList.length) % featureImageList.length
     );
   };
 
   const goToNextSlide = () => {
-    setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length);
+    setCurrentSlide((prevSlide) => (prevSlide + 1) % featureImageList.length);
   };
 
   useEffect(() => {
@@ -113,6 +115,7 @@ function ShoppingHome() {
     ).then((data) => {
       if (data?.payload?.success) {
         dispatch(fetchCartItems(user.id));
+
         toast({
           title: "product is added to cart",
         });
@@ -124,18 +127,24 @@ function ShoppingHome() {
     if (productDetails !== null) setOpenDetailsDialog(true);
   }, [productDetails]);
 
+  useEffect(() => {
+    dispatch(getFeatureImages());
+  }, [dispatch]);
+
   return (
     <div className="flex flex-col min-h-screen">
       <div className="relative w-full h-[600px] overflow-hidden">
-        {slides.map((slide, index) => (
-          <img
-            src={slide}
-            key={index}
-            className={` absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000 ${
-              index === currentSlide ? "opacity-100" : "opacity-0"
-            }`}
-          />
-        ))}
+        {featureImageList && featureImageList.length > 0
+          ? featureImageList.map((slide, index) => (
+              <img
+                src={slide?.image}
+                key={index}
+                className={` absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000 ${
+                  index === currentSlide ? "opacity-100" : "opacity-0"
+                }`}
+              />
+            ))
+          : null}
         <Button
           variant="outline"
           size="icon"

@@ -8,7 +8,6 @@ import { useState } from "react";
 import { AddressFormData } from "@/store/shop/address-slice";
 import { confirmOrder, createNewOrder } from "@/store/shop/order-slice";
 import { useToast } from "@/hooks/use-toast";
-// import { useLocation } from "react-router-dom";
 
 function ShoppingCheckout() {
   const { cartItems } = useSelector((state: RootState) => state.shopCart);
@@ -133,7 +132,7 @@ function ShoppingCheckout() {
                   Processing...
                 </div>
               ) : (
-                "Checkout without Payment"
+                "Checkout with Cash on delivery!"
               )}
             </Button>
           </div>

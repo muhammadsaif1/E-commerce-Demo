@@ -38,14 +38,13 @@ function MenuItems() {
   function navigateHandler(getCurrentMenuItem: menuItem) {
     sessionStorage.removeItem("filters");
     const currentFilters =
-      getCurrentMenuItem.id !== "home" && getCurrentMenuItem.id !== "products"
+      getCurrentMenuItem.id !== "home" &&
+      getCurrentMenuItem.id !== "products" &&
+      getCurrentMenuItem.id !== "search"
         ? { category: [getCurrentMenuItem.id] }
         : null;
     sessionStorage.setItem("filters", JSON.stringify(currentFilters));
-    if (
-      location.pathname.includes("listing") &&
-      currentFilters !== null
-    ) {
+    if (location.pathname.includes("listing") && currentFilters !== null) {
       setSearchParams(
         new URLSearchParams(`?category=${getCurrentMenuItem.id}`)
       );

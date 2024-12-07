@@ -44,7 +44,7 @@ function MenuItems() {
     sessionStorage.setItem("filters", JSON.stringify(currentFilters));
     if (
       location.pathname.includes("listing") &&
-      currentFilters !== null // Updated condition
+      currentFilters !== null
     ) {
       setSearchParams(
         new URLSearchParams(`?category=${getCurrentMenuItem.id}`)

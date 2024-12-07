@@ -103,7 +103,10 @@ function ShoppingCheckout() {
         <img className="h-full w-full object-cover object-center" src={img} />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-5 p-5">
-        <Address setCurrentSelectedAddress={setCurrentSelectedAddress} />
+        <Address
+          selectedId={currentSelectedAddress?._id ?? ""}
+          setCurrentSelectedAddress={setCurrentSelectedAddress}
+        />
         <div className="flex flex-col gap-5" key={cartItems?._id}>
           {cartItems && cartItems.items && cartItems.items.length > 0
             ? cartItems.items.map((item) => (

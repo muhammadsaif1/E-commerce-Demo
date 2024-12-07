@@ -11,6 +11,7 @@ interface AddressCardType {
   setCurrentSelectedAddress: React.Dispatch<
     React.SetStateAction<AddressFormData | null>
   >;
+  selectedId: string;
 }
 
 function AddressCard({
@@ -18,13 +19,26 @@ function AddressCard({
   deleteHandler,
   editHandler,
   setCurrentSelectedAddress,
+  selectedId,
 }: AddressCardType) {
   const handleClick = setCurrentSelectedAddress
     ? () => setCurrentSelectedAddress(addressInfo ?? null)
     : undefined;
   return (
-    <Card onClick={handleClick}>
-      <CardContent key={addressInfo?._id} className="grid gap-4 p-4">
+    <Card
+      className={`cursor-pointer mb-4 mr-2  border-red-700 ${
+        selectedId === addressInfo?._id
+          ? "border-red-900 border-[4px]"
+          : "border-black"
+      }`}
+      onClick={handleClick}
+    >
+      <CardContent
+        key={addressInfo?._id}
+        className={`${
+          selectedId === addressInfo?._id ? "border-black" : ""
+        } grid gap-4 p-4`}
+      >
         <Label>Address: {addressInfo?.address}</Label>
         <Label>City: {addressInfo?.city}</Label>
         <Label>Pincode: {addressInfo?.pincode}</Label>

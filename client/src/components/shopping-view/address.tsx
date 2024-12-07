@@ -27,9 +27,10 @@ interface AddressProps {
   setCurrentSelectedAddress: React.Dispatch<
     React.SetStateAction<AddressFormData | null>
   >;
+  selectedId: string;
 }
 
-function Address({ setCurrentSelectedAddress }: AddressProps) {
+function Address({ setCurrentSelectedAddress, selectedId }: AddressProps) {
   const [formData, setFormData] = useState<AddressFormData>(initialFormData);
   const [isFormValid, setIsFormValid] = useState<boolean>(false);
   const [currentEditingId, setCurrentEditingId] = useState<string | null>(null);
@@ -142,6 +143,7 @@ function Address({ setCurrentSelectedAddress }: AddressProps) {
               editHandler={editHandler}
               deleteHandler={deleteHandler}
               addressInfo={item}
+              selectedId={selectedId}
             />
           ))
         ) : (

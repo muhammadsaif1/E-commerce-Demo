@@ -19,9 +19,39 @@ function UserCartItemsContent({ cartItem }: UserCartItemsContentProps) {
   const { user } = useSelector((state: RootState) => state.auth) as {
     user: UserPayload;
   };
+  const { cartItems } = useSelector((state: RootState) => state.shopCart);
+  const { productList } = useSelector((state: RootState) => state.shopProducts);
+
   const { toast } = useToast();
 
   function updateQuantityHandler(cartItem: CartItem, typeOfAction: string) {
+    if (typeOfAction === "plus") {
+      let getCartItems = cartItems.items || [];
+      const indexOfCurrentCartItem = getCartItems.findIndex(
+        (item) => item.productId === cartItem?.productId
+      );
+
+      const getCurrentProductIndex = productList.findIndex(
+        (product) => product?._id === cartItem?.productId
+      );
+      const getTotalStock = productList[getCurrentProductIndex]?.totalStock;
+      if (indexOfCurrentCartItem > -1) {
+        const getQuantity = getCartItems[indexOfCurrentCartItem].quantity;
+        if (getQuantity + 1 > Number(getTotalStock)) {
+          toast({
+            title: `Only ${getTotalStock} quantity can be added for this product`,
+            variant: "destructive",
+          });
+          return;
+        }
+      } else if (1 > Number(getTotalStock)) {
+        toast({
+          title: `No stock available for this product`,
+          variant: "destructive",
+        });
+        return;
+      }
+    }
     dispatch(
       updateCartQuantity({
         userId: user?.id,

@@ -28,8 +28,30 @@ function ProductDetailsDialog({
   const { user } = useSelector((state: RootState) => state.auth) as {
     user: UserPayload;
   };
+  const { cartItems } = useSelector((state: RootState) => state.shopCart);
 
-  function addToCartHandler(productId: string) {
+  function addToCartHandler(productId: string, getTotalStock: string) {
+    let getCartItems = cartItems.items || [];
+    const indexOfCurrentItem = getCartItems.findIndex(
+      (item) => item.productId === productId
+    );
+
+    if (indexOfCurrentItem > -1) {
+      const getQuantity = getCartItems[indexOfCurrentItem].quantity;
+      if (getQuantity + 1 > Number(getTotalStock)) {
+        toast({
+          title: `Only ${getTotalStock} quantity can be added for this product`,
+          variant: "destructive",
+        });
+        return;
+      }
+    } else if (1 > Number(getTotalStock)) {
+      toast({
+        title: `No stock available for this product`,
+        variant: "destructive",
+      });
+      return;
+    }
     dispatch(
       addToCart({ userId: user.id, productId: productId, quantity: 1 })
     ).then((data) => {
@@ -90,12 +112,26 @@ function ProductDetailsDialog({
             <span className="text-muted-foreground">(4.5)</span>
           </div>
           <div className="mt-5 mb-5">
-            <Button
-              onClick={() => addToCartHandler(productDetails?._id ?? "")}
-              className="w-full"
-            >
-              Add to Cart
-            </Button>
+            {Number(productDetails?.totalStock) === 0 ? (
+              <Button
+                className="w-full cursor-not-allowed"
+                disabled={Number(productDetails?.totalStock) === 0}
+              >
+                Out of Stock
+              </Button>
+            ) : (
+              <Button
+                onClick={() =>
+                  addToCartHandler(
+                    productDetails?._id ?? "",
+                    productDetails?.totalStock ?? ""
+                  )
+                }
+                className="w-full"
+              >
+                Add to Cart
+              </Button>
+            )}
           </div>
           <Separator />
           <div className="max-h-[300px] overflow-auto  ">

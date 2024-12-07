@@ -45,6 +45,7 @@ function ShoppingListing() {
   const { user } = useSelector((state: RootState) => state.auth) as {
     user: UserPayload;
   };
+  const { cartItems } = useSelector((state: RootState) => state.shopCart);
   const [filters, setFilters] = useState<FilterParams>({});
   const [sort, setSort] = useState<SortParams>({ sortBy: "price-lowtohigh" });
   const [searchParams, setSearchParams] = useSearchParams();
@@ -74,7 +75,6 @@ function ShoppingListing() {
         copyFilters[getSectionId].push(getCurrentOption);
       else copyFilters[getSectionId].splice(indexOfCurrentOption, 1);
     }
-    console.log(copyFilters);
     setFilters(copyFilters);
     sessionStorage.setItem("filters", JSON.stringify(copyFilters));
   }
@@ -83,14 +83,36 @@ function ShoppingListing() {
     dispatch(fetchProductDetails(productId));
   }
 
-  function addToCartHandler(productId: string) {
+  function addToCartHandler(productId: string, getTotalStock: string) {
+    let getCartItems = cartItems.items || [];
+    const indexOfCurrentItem = getCartItems.findIndex(
+      (item) => item.productId === productId
+    );
+
+    if (indexOfCurrentItem > -1) {
+      const getQuantity = getCartItems[indexOfCurrentItem].quantity;
+      if (getQuantity + 1 > Number(getTotalStock)) {
+        toast({
+          title: `Only ${getTotalStock} quantity can be added for this product`,
+          variant: "destructive",
+        });
+        return;
+      }
+    } else if (1 > Number(getTotalStock)) {
+      toast({
+        title: `No stock available for this product`,
+        variant: "destructive",
+      });
+      return;
+    }
+
     dispatch(
       addToCart({ userId: user.id, productId: productId, quantity: 1 })
     ).then((data) => {
       if (data?.payload?.success) {
         dispatch(fetchCartItems(user.id));
         toast({
-          title: "product is added to cart",
+          title: "Product is added to cart",
         });
       }
     });
@@ -120,6 +142,7 @@ function ShoppingListing() {
   useEffect(() => {
     if (productDetails !== null) setOpenDetailsDialog(true);
   }, [productDetails]);
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 p-4 md:p-6">
       <ProductFilter filters={filters} handleFilter={handleFilter} />

@@ -7,7 +7,7 @@ import { Card, CardContent, CardFooter } from "../ui/card";
 interface ShoppingProductTileProps {
   product: ProductFormData;
   productDetailHandler: (id: string) => void;
-  addToCartHandler: (id: string) => void;
+  addToCartHandler: (id: string, qty: string) => void;
 }
 function ShoppingProductTile({
   product,
@@ -23,7 +23,15 @@ function ShoppingProductTile({
             alt={product?.title}
             className="w-full h-[300px] object-cover rounded-t-lg"
           />
-          {Number(product?.salePrice) > 0 ? (
+          {Number(product?.totalStock) === 0 ? (
+            <Badge className="absolute top-2 left-2 bg-red-600 hover:bg-red-700">
+              Out of stock
+            </Badge>
+          ) : Number(product?.totalStock) < 10 ? (
+            <Badge className="absolute top-2 left-2 bg-red-600 hover:bg-red-700">
+              Only{product?.totalStock} items left
+            </Badge>
+          ) : Number(product?.salePrice) > 0 ? (
             <Badge className="absolute top-2 left-2 bg-red-600 hover:bg-red-700">
               Sale
             </Badge>
@@ -60,12 +68,21 @@ function ShoppingProductTile({
         </CardContent>
       </div>
       <CardFooter>
-        <Button
-          onClick={() => addToCartHandler(product?._id)}
-          className="w-full"
-        >
-          Add to cart
-        </Button>
+        {Number(product?.totalStock) === 0 ? (
+          <Button
+            className="w-full cursor-not-allowed"
+            disabled={Number(product?.totalStock) === 0}
+          >
+            Out of Stock
+          </Button>
+        ) : (
+          <Button
+            onClick={() => addToCartHandler(product?._id, product?.totalStock)}
+            className="w-full"
+          >
+            Add to cart
+          </Button>
+        )}
       </CardFooter>
     </Card>
   );

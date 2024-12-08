@@ -33,10 +33,10 @@ function OrderSuccessPage() {
         <button
           className="mt-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-all"
           onClick={() => {
-            window.location.href = "/shop/checkout";
+            window.location.href = "/shop/account";
           }}
         >
-          Go to Checkout
+          Track here
         </button>
       </div>
     </div>

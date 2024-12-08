@@ -211,11 +211,18 @@ export const sortOptions = [
 
 export const addressFormControls = [
   {
+    label: "Name",
+    name: "name",
+    componentType: "input" as const,
+    type: "text",
+    placeholder: "Enter your Name",
+  },
+  {
     label: "Address",
     name: "address",
     componentType: "input" as const,
     type: "text",
-    placeholder: "Enter your address",
+    placeholder: "Enter your Address",
   },
   {
     label: "City",

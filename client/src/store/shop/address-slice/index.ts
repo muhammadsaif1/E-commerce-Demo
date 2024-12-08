@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
 export type AddressFormData = {
+  name?: string;
   _id?: string;
   userId?: string;
   city: string;

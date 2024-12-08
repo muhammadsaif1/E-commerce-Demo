@@ -6,7 +6,11 @@ import UserCartItemsContent from "@/components/shopping-view/cart-items-content"
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { AddressFormData } from "@/store/shop/address-slice";
-import { confirmOrder, createNewOrder } from "@/store/shop/order-slice";
+import {
+  confirmOrder,
+  createNewOrder,
+  resetOrderDetails,
+} from "@/store/shop/order-slice";
 import { useToast } from "@/hooks/use-toast";
 
 function ShoppingCheckout() {
@@ -57,6 +61,7 @@ function ShoppingCheckout() {
         quantity: item?.quantity,
       })),
       addressInfo: {
+        name: currentSelectedAddress?.name,
         addressId: currentSelectedAddress?._id,
         address: currentSelectedAddress?.address,
         city: currentSelectedAddress?.city,
@@ -73,7 +78,7 @@ function ShoppingCheckout() {
 
     setTimeout(() => {
       dispatch(createNewOrder(orderData)).then((data) => {
-        setLoading(false); // Stop loader after dispatch
+        setLoading(false);
         if (data?.payload?.success) {
           toast({
             title: "Order Placed Successfully",
@@ -85,10 +90,9 @@ function ShoppingCheckout() {
     const orderId = JSON.parse(
       sessionStorage.getItem("currentOrderId") || "null"
     );
+    dispatch(resetOrderDetails());
     setTimeout(() => {
       dispatch(confirmOrder(orderId)).then((data) => {
-        console.log("confirmation response", data);
-
         if (data?.payload?.success) {
           window.location.href = "/shop/order-success";
         }

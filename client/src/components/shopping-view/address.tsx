@@ -16,6 +16,7 @@ import AddressCard from "./address-card";
 import { useToast } from "@/hooks/use-toast";
 
 const initialFormData: AddressFormData = {
+  name: "",
   address: "",
   city: "",
   phone: "",
@@ -62,6 +63,7 @@ function Address({ setCurrentSelectedAddress, selectedId }: AddressProps) {
     setCurrentEditingId(getCurrentAddress?._id || null);
     setFormData({
       ...formData,
+      name: getCurrentAddress?.name,
       address: getCurrentAddress?.address,
       city: getCurrentAddress?.city,
       phone: getCurrentAddress?.phone,
@@ -71,7 +73,14 @@ function Address({ setCurrentSelectedAddress, selectedId }: AddressProps) {
   }
 
   function validateForm() {
-    const requiredFields = ["address", "city", "phone", "pincode", "notes"];
+    const requiredFields = [
+      "address",
+      "city",
+      "phone",
+      "pincode",
+      "notes",
+      "name",
+    ];
     return requiredFields.every(
       (field) => formData[field as keyof AddressFormData]?.trim() !== ""
     );

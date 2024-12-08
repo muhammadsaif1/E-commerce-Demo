@@ -34,9 +34,9 @@ function ShoppingOrders() {
   );
 
   function handleFetchOrderDetails(id: string) {
+    setOpenDetailsDialog(true);
     dispatch(getOrderDetails(id));
-    setSelectedOrderId(id); // Set the selected order ID when fetching details
-    setOpenDetailsDialog(true); // Open the dialog
+    setSelectedOrderId(id);
   }
 
   useEffect(() => {
@@ -44,15 +44,12 @@ function ShoppingOrders() {
   }, [dispatch]);
 
   useEffect(() => {
-    // Close the dialog when orderDetails are fetched successfully
     if (orderDetails && orderDetails._id === selectedOrderId) {
       setOpenDetailsDialog(true);
     } else {
       setOpenDetailsDialog(false);
     }
   }, [orderDetails, selectedOrderId]);
-
-  console.log(orderDetails, "list listan listan");
 
   return (
     <Card>

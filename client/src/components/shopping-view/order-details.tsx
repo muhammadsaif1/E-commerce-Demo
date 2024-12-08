@@ -1,11 +1,12 @@
 import { UserPayload } from "@/store/auth-slice";
 import { OrderData } from "@/store/shop/order-slice";
 import { RootState } from "@/store/store";
-import { DialogContent, DialogTitle } from "@radix-ui/react-dialog";
-import { Label } from "@radix-ui/react-label";
-import { Separator } from "@radix-ui/react-select";
+
 import { useSelector } from "react-redux";
 import { Badge } from "../ui/badge";
+import { DialogContent, DialogTitle } from "../ui/dialog";
+import { Label } from "../ui/label";
+import { Separator } from "../ui/separator";
 
 interface ShoppingOrderDetailsViewProps {
   orderDetails: OrderData;

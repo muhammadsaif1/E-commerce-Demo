@@ -30,8 +30,9 @@ function AdminOrdersView() {
 
   function handleFetchOrderDetails(id: string) {
     dispatch(getOrderDetailsForAdmin(id));
-    setSelectedOrderId(id); // Set the selected order ID when fetching details
-    setOpenDetailsDialog(true); // Open the dialog
+    setSelectedOrderId(id);
+
+    setOpenDetailsDialog(true);
   }
 
   const dispatch: AppDispatch = useDispatch();
@@ -39,9 +40,6 @@ function AdminOrdersView() {
   useEffect(() => {
     dispatch(getAllOrdersForAdmin());
   }, [dispatch]);
-
-  console.log(orderList);
-  console.log(orderDetails, "detailslslls");
 
   useEffect(() => {
     if (orderDetails !== null) {
@@ -122,15 +120,3 @@ function AdminOrdersView() {
 }
 
 export default AdminOrdersView;
-
-{
-  /* <Dialog
-open={openDetailsDialog}
-onOpenChange={setOpenDetailsDialog}
->
-<Button onClick={() => setOpenDetailsDialog(true)}>
-  View Details
-</Button>
-<AdminOrderDetailsView />
-</Dialog> */
-}

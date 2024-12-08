@@ -24,10 +24,10 @@ const initialFormData: AddressFormData = {
 };
 
 interface AddressProps {
-  setCurrentSelectedAddress: React.Dispatch<
+  setCurrentSelectedAddress?: React.Dispatch<
     React.SetStateAction<AddressFormData | null>
   >;
-  selectedId: string;
+  selectedId?: string;
 }
 
 function Address({ setCurrentSelectedAddress, selectedId }: AddressProps) {

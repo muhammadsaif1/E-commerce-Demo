@@ -28,11 +28,8 @@ function AdminDashboard() {
     dispatch(getFeatureImages());
   }, [dispatch]);
 
-  console.log(featureImageList, "ds");
-
   return (
     <div>
-      {/* <h1>Upload Feature Images</h1> */}
       <ProductImageUpload
         imageFile={imageFile}
         setImageFile={setImageFile}

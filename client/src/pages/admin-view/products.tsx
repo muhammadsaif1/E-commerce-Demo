@@ -57,8 +57,6 @@ function AdminProducts() {
           setFormData(initialFormData);
           setOpenCreateProductsDialog(false);
           setCurrentEditedId(null);
-        } else {
-          console.log("failed to edit productList", data);
         }
       });
     } else {
@@ -83,19 +81,11 @@ function AdminProducts() {
 
   function deleteHandler(getCurrentProductId: string) {
     console.log(getCurrentProductId);
-    dispatch(deleteProduct({ id: getCurrentProductId }))
-      .then((data) => {
-        if (data.payload?.success) {
-          dispatch(fetchAllProducts());
-
-          console.log("Product deleted successfully");
-        } else {
-          console.log("Failed to delete the product");
-        }
-      })
-      .catch((error) => {
-        console.log("Error occurred while deleting the product", error);
-      });
+    dispatch(deleteProduct({ id: getCurrentProductId })).then((data) => {
+      if (data.payload?.success) {
+        dispatch(fetchAllProducts());
+      }
+    });
   }
 
   function formValidHandler() {
@@ -124,15 +114,12 @@ function AdminProducts() {
       })
       .every(Boolean);
 
-    console.log("Form Data Validation:", isFormValid);
-
     return isImageValid && isFormValid;
   }
 
   useEffect(() => {
     dispatch(fetchAllProducts());
   }, [dispatch]);
-  console.log(productList);
 
   return (
     <Fragment>

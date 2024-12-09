@@ -18,7 +18,6 @@ function ShoppingOrderDetailsView({
   const { user } = useSelector((state: RootState) => state.auth) as {
     user: UserPayload;
   };
-  console.log(orderDetails?.addressInfo?.name, "name");
   return (
     <DialogContent className="sm:max-w-[600px]">
       <DialogTitle className="sr-only">Order Details</DialogTitle>

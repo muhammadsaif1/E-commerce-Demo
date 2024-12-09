@@ -5,7 +5,7 @@ import { Checkbox } from "../ui/checkbox";
 import { Separator } from "../ui/separator";
 
 interface ProductFilterProps {
-  filters: { [key: string]: string[] }; // Adjust as per the actual filter structure
+  filters: { [key: string]: string[] };
   handleFilter: (key: string, option: string) => void;
 }
 
